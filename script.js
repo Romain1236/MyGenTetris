@@ -293,26 +293,133 @@ function playerReset() {
     }
 }
 
+// Fonction pour nettoyer l'arène des lignes complètes avec animation de clignotement et comptage des combos
 function arenaSweep() {
     let rowCount = 0;
     outer: for (let y = arena.length - 1; y > 0; --y) {
+        let isComplete = true;
         for (let x = 0; x < arena[y].length; ++x) {
             if (arena[y][x] === 0) {
-                continue outer;
+                isComplete = false;
+                break;
             }
         }
 
-        const row = arena.splice(y, 1)[0].fill(0);
-        arena.unshift(row);
-        ++y;
+        if (isComplete) {
+            // Jouer le son de validation de ligne
+            lineClearSound.play();
 
-        rowCount++;
-    }
+            // Ajouter une classe d'animation à chaque cellule de la ligne complète
+            for (let x = 0; x < arena[y].length; ++x) {
+                let cell = document.createElement('div');
+                cell.style.position = 'absolute';
+                cell.style.width = '30px';  // Ajusté pour correspondre à l'échelle
+                cell.style.height = '30px'; // Ajusté pour correspondre à l'échelle
+                cell.style.left = `${x * 30}px`;
+                cell.style.top = `${y * 30}px`;
+                cell.style.backgroundColor = colors[arena[y][x]];
+                cell.classList.add('blink');
+                cell.style.zIndex = 1000;  // Assurez-vous que les divs sont au-dessus du canvas
+                canvas.parentElement.appendChild(cell);
 
-    if (rowCount > 0) {
-        player.score += rowCount * 10;
-        updateScore();
+                // Retirer l'animation après un court délai
+                setTimeout(() => {
+                    canvas.parentElement.removeChild(cell);
+                }, 600);
+            }
+
+            // Retirer la ligne complète après l'animation
+            setTimeout(() => {
+                const row = arena.splice(y, 1)[0].fill(0);
+                arena.unshift(row);
+                ++y;
+                rowCount++;
+                if (rowCount > 0) {
+                    let scoreMultiplier = 1;
+                    let comboText = "";
+                    switch (rowCount) {
+                        case 1:
+                            scoreMultiplier = 1;
+                            break;
+                        case 2:
+                            scoreMultiplier = 1.5;
+                            comboText = "Combo x1.5";
+                            break;
+                        case 3:
+                            scoreMultiplier = 3;
+                            comboText = "Combo x3";
+                            break;
+                        case 4:
+                            scoreMultiplier = 5;
+                            comboText = "Combo x5";
+                            break;
+                    }
+                    player.score += 10 * rowCount * scoreMultiplier;
+                    updateScore();
+                    if (rowCount > 1) {
+                        showCombo(comboText, scoreMultiplier); // Afficher l'animation de combo avec la taille et le volume appropriés
+                    }
+                }
+            }, 600);
+        }
     }
+}
+
+// Fonction pour afficher l'animation de combo
+function showCombo(text, multiplier) {
+    const comboDisplay = document.getElementById('combo-display');
+    comboDisplay.textContent = text;
+    
+    let fontSize;
+    let volume;
+    
+    switch(multiplier) {
+        case 1.5:
+            fontSize = '1.5em';
+            volume = 0.5;
+            break;
+        case 3:
+            fontSize = '2em';
+            volume = 0.7;
+            break;
+        case 5:
+            fontSize = '3em';
+            volume = 1.0;
+            break;
+        default:
+            fontSize = '1em';
+            volume = 0.3;
+    }
+    
+    comboDisplay.style.fontSize = fontSize;
+    lineClearSound.volume = volume;
+    lineClearSound.play();
+    
+    comboDisplay.classList.add('combo-show');
+    setTimeout(() => {
+        comboDisplay.classList.remove('combo-show');
+    }, 1000);
+}
+
+// Fonction pour afficher l'écran "Game Over"
+function showGameOverModal() {
+    const gameoverModal = document.getElementById('gameover-modal');
+    gameoverModal.style.display = 'flex';
+    isPaused = true;
+    cancelAnimationFrame(animationFrameId);
+    clearInterval(timerInterval);
+}
+
+// Fonction pour redémarrer le jeu après "Game Over"
+function restartGame() {
+    hideGameOverModal();
+    resetGame();
+}
+
+// Fonction pour cacher l'écran "Game Over"
+function hideGameOverModal() {
+    const gameoverModal = document.getElementById('gameover-modal');
+    gameoverModal.style.display = 'none';
 }
 
 // =====================
@@ -565,10 +672,19 @@ document.addEventListener('DOMContentLoaded', () => {
     update();
 });
 
+// Fonction pour réinitialiser le jeu
 function resetGame() {
-    player.score = 0;
-    playerReset();
     arena.forEach(row => row.fill(0));
+    playerReset();
     updateScore();
-    resetTimer();
+    resetTimer(); // Réinitialiser le chronomètre
+    dropCounter = 0;
+    isPaused = false;
+    dropInterval = 1000; // Réinitialiser l'intervalle de chute
+    lastAcceleration = 0; // Réinitialiser le temps de la dernière accélération
+    if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+    }
+    animationFrameId = requestAnimationFrame(update);
+    startTimer(); // Démarrer le chronomètre
 }

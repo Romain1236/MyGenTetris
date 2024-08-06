@@ -296,6 +296,27 @@ h1 {
     width: 80%;
 }
 
+/* Style pour le message d'erreur */
+#name-modal-message {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+}
+
+/* Style pour le bouton de fermeture */
+#name-modal-close {
+    background-color: #ff0000;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.2em;
+}
+
+#name-modal-close:hover {
+    background-color: #cc0000;
+}
+
 #startup-modal h2 {
     margin-bottom: 20px;
 }

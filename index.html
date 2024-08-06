@@ -86,7 +86,7 @@
             </ul>
             <div>
                 <label for="startup-player-name">Player Name: </label>
-                <input type="text" id="startup-player-name" value="Player 1">
+                <input type="text" id="startup-player-name" value="Player 1" required>
             </div>
         </div>
     </div>
@@ -100,6 +100,14 @@
         </div>
     </div>
 	
+    <!--*boite modale indiquant de renseigner le nom du joueur-->
+    <div class="modal" id="name-modal">
+        <div class="modal-content" id="name-modal-content">
+            <p id="name-modal-message">Please enter a valid player name.</p>
+            <button id="name-modal-close">OK</button>
+        </div>
+    </div>
+
     <!-- Affichage des combos -->
 	<div class="combo-display" id="combo-display">
 	</div>

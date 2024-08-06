@@ -540,7 +540,12 @@ document.addEventListener('keydown', event => {
 // Gestion des boutons de sélection de personnage
 document.querySelectorAll('.player-button').forEach(button => {
     button.addEventListener('click', () => {
+        if (document.getElementById('player-name').value === 'Player 1' || document.getElementById('player-name').value.trim() === '') {
+            showNameModal();
+            return;
+        }
         player.character = button.dataset.player;
+        player.name = document.getElementById('player-name').value;
         resetGame();
         hideModal();
         showModal(`${button.dataset.player} ! T'y a changé le kimono !`);
@@ -556,9 +561,14 @@ document.getElementById('player-name').addEventListener('input', event => {
 // Gestion des boutons de sélection de personnage dans la boîte modale de démarrage
 document.querySelectorAll('.startup-player-button').forEach(button => {
     button.addEventListener('click', () => {
+        const playerName = document.getElementById('startup-player-name').value;
+        if (playerName === 'Player 1' || playerName.trim() === '') {
+            showNameModal();
+            return;
+        }
         player.character = button.dataset.player;
-        player.name = document.getElementById('startup-player-name').value;
-        document.getElementById('player-name').value = player.name;
+        player.name = playerName;
+        document.getElementById('player-name').value = playerName;
         hideStartupModal();
         resetGame();
         showModal(`${button.dataset.player} ! T'y a mis le kimono !`);
@@ -568,6 +578,11 @@ document.querySelectorAll('.startup-player-button').forEach(button => {
 
 // Fonction pour réinitialiser le jeu
 function resetGame() {
+    if (player.name === 'Player 1' || player.name.trim() === '') {
+        showNameModal();
+        showStartupModal();
+        return;
+    }
     arena.forEach(row => row.fill(0));
     playerReset();
     updateScore();
@@ -621,6 +636,21 @@ function hideStartupModal() {
     if (player.character) {
         startTimer(); // Redémarrer le chronomètre lorsque le personnage est sélectionné
     }
+}
+
+// Ajouter l'événement de clic pour fermer la boîte modale
+document.getElementById('name-modal-close').addEventListener('click', hideNameModal);
+
+// Fonction pour afficher la boîte modale du nom
+function showNameModal() {
+    const nameModal = document.getElementById('name-modal');
+    nameModal.style.display = 'flex';
+}
+
+// Fonction pour masquer la boîte modale du nom
+function hideNameModal() {
+    const nameModal = document.getElementById('name-modal');
+    nameModal.style.display = 'none';
 }
 
 // Fonction pour changer l'image de fond en fonction du personnage sélectionné

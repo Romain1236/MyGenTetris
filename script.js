@@ -6,12 +6,13 @@ const canvas = document.getElementById('tetris');
 const context = canvas.getContext('2d');
 const nextCanvas = document.getElementById('next-piece');
 const nextContext = nextCanvas.getContext('2d');
+const bannedWords = ['bite', 'pute', 'salope', 'chatte', 'nichon', 'encule', 'enculé', 'hitler', 'adolf']; // Remplacez par les mots interdits réels
 
 canvas.width = 240;
 canvas.height = 400;
 
 context.scale(20, 20);  // Échelle mise à jour pour correspondre à la taille du canvas
-nextContext.scale(10, 10); // Échelle pour la prochaine pièce
+nextContext.scale(20, 20); // Échelle pour la prochaine pièce
 
 let isPaused = true;
 let animationFrameId;
@@ -546,12 +547,17 @@ document.addEventListener('keydown', event => {
 
 document.querySelectorAll('.player-button').forEach(button => {
     button.addEventListener('click', () => {
-        if (document.getElementById('player-name').value === 'Player 1' || document.getElementById('player-name').value.trim() === '') {
+        const playerName = document.getElementById('player-name').value;
+        if (playerName === 'Player 1' || playerName.trim() === '') {
             showNameModal();
             return;
         }
+        if (containsBannedWord(playerName)) {
+            showBannedWordModal();
+            return;
+        }
         player.character = button.dataset.player;
-        player.name = document.getElementById('player-name').value;
+        player.name = playerName;
         resetGame();
         hideModal();
         showModal(`${button.dataset.player} ! T'y a changé le kimono !`);
@@ -570,6 +576,10 @@ document.querySelectorAll('.startup-player-button').forEach(button => {
             showNameModal();
             return;
         }
+        if (containsBannedWord(playerName)) {
+            showBannedWordModal();
+            return;
+        }
         player.character = button.dataset.player;
         player.name = playerName;
         document.getElementById('player-name').value = playerName;
@@ -579,6 +589,24 @@ document.querySelectorAll('.startup-player-button').forEach(button => {
         changeBackground(button.dataset.player);
     });
 });
+
+
+// =====================
+// Gestion des mots interdits
+// =====================
+
+// Fonction pour vérifier les mots interdits
+function containsBannedWord(name) {
+    return bannedWords.some(word => name.toLowerCase().includes(word));
+}
+
+// Fonction pour afficher le message "You are better than this"
+function showBannedWordModal() {
+    const bannedWordModal = document.getElementById('banned-word-modal');
+    bannedWordModal.style.display = 'flex';
+}
+
+
 
 // =====================
 // Gestion de la Boîte Modale
@@ -631,6 +659,13 @@ function hideNameModal() {
     const nameModal = document.getElementById('name-modal');
     nameModal.style.display = 'none';
 }
+
+function hideBannedWordModal() {
+    const bannedWordModal = document.getElementById('banned-word-modal');
+    bannedWordModal.style.display = 'none';
+}
+
+document.getElementById('banned-word-modal-close').addEventListener('click', hideBannedWordModal);
 
 // =====================
 // Gestion de l'Arrière-plan

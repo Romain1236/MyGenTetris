@@ -628,25 +628,25 @@ function changeBackground(player) {
     const tetrisContainer = document.querySelector('.tetris-container');
     switch(player) {
         case 'La D':
-            tetrisContainer.style.backgroundImage = "url('La_D.jpg')";
+            tetrisContainer.style.backgroundImage = "url('images/La_D.jpg')";
             break;
         case 'La N':
-            tetrisContainer.style.backgroundImage = "url('La_N.jpg')";
+            tetrisContainer.style.backgroundImage = "url('images/La_N.jpg')";
             break;
         case 'Le L':
-            tetrisContainer.style.backgroundImage = "url('Le_L.jpg')";
+            tetrisContainer.style.backgroundImage = "url('images/Le_L.jpg')";
             break;
         case 'Le M':
-            tetrisContainer.style.backgroundImage = "url('Le_M.jpg')";
+            tetrisContainer.style.backgroundImage = "url('images/Le_M.jpg')";
             break;
         case 'Le R':
-            tetrisContainer.style.backgroundImage = "url('Le_R.jpg')";
+            tetrisContainer.style.backgroundImage = "url('images/Le_R.jpg')";
             break;
         case 'Le S':
-            tetrisContainer.style.backgroundImage = "url('Le_S.jpg')";
+            tetrisContainer.style.backgroundImage = "url('images/Le_S.jpg')";
             break;
         case 'Le Gouss':
-            tetrisContainer.style.backgroundImage = "url('Le_Gouss.jpg')";
+            tetrisContainer.style.backgroundImage = "url('images/Le_Gouss.jpg')";
             break;
         default:
             tetrisContainer.style.backgroundImage = 'none';

@@ -293,9 +293,11 @@ function playerReset() {
     }
 }
 
-// Fonction pour nettoyer l'arène des lignes complètes avec animation de clignotement et comptage des combos
 function arenaSweep() {
     let rowCount = 0;
+    const rowsToRemove = [];
+
+    // Identifier les lignes complètes
     outer: for (let y = arena.length - 1; y > 0; --y) {
         let isComplete = true;
         for (let x = 0; x < arena[y].length; ++x) {
@@ -306,6 +308,7 @@ function arenaSweep() {
         }
 
         if (isComplete) {
+            rowsToRemove.push(y);
             // Jouer le son de validation de ligne
             lineClearSound.play();
 
@@ -327,42 +330,43 @@ function arenaSweep() {
                     canvas.parentElement.removeChild(cell);
                 }, 600);
             }
-
-            // Retirer la ligne complète après l'animation
-            setTimeout(() => {
-                const row = arena.splice(y, 1)[0].fill(0);
-                arena.unshift(row);
-                ++y;
-                rowCount++;
-                if (rowCount > 0) {
-                    let scoreMultiplier = 1;
-                    let comboText = "";
-                    switch (rowCount) {
-                        case 1:
-                            scoreMultiplier = 1;
-                            break;
-                        case 2:
-                            scoreMultiplier = 1.5;
-                            comboText = "Combo x1.5";
-                            break;
-                        case 3:
-                            scoreMultiplier = 3;
-                            comboText = "Combo x3";
-                            break;
-                        case 4:
-                            scoreMultiplier = 5;
-                            comboText = "Combo x5";
-                            break;
-                    }
-                    player.score += 10 * rowCount * scoreMultiplier;
-                    updateScore();
-                    if (rowCount > 1) {
-                        showCombo(comboText, scoreMultiplier); // Afficher l'animation de combo avec la taille et le volume appropriés
-                    }
-                }
-            }, 600);
         }
     }
+
+    // Retirer les lignes complètes après l'animation
+    setTimeout(() => {
+        for (let i = rowsToRemove.length - 1; i >= 0; i--) {
+            const row = arena.splice(rowsToRemove[i], 1)[0].fill(0);
+            arena.unshift(row);
+        }
+
+        if (rowsToRemove.length > 0) {
+            let scoreMultiplier = 1;
+            let comboText = "";
+            switch (rowsToRemove.length) {
+                case 1:
+                    scoreMultiplier = 1;
+                    break;
+                case 2:
+                    scoreMultiplier = 1.5;
+                    comboText = "Combo x1.5";
+                    break;
+                case 3:
+                    scoreMultiplier = 3;
+                    comboText = "Combo x3";
+                    break;
+                case 4:
+                    scoreMultiplier = 5;
+                    comboText = "Combo x5";
+                    break;
+            }
+            player.score += 10 * rowsToRemove.length * scoreMultiplier;
+            updateScore();
+            if (rowsToRemove.length > 1) {
+                showCombo(comboText, scoreMultiplier); // Afficher l'animation de combo avec la taille et le volume appropriés
+            }
+        }
+    }, 600);
 }
 
 // Fonction pour afficher l'animation de combo
@@ -430,6 +434,7 @@ function playerRotate(dir) {
     const pos = player.pos.x;
     let offset = 1;
     rotate(player.matrix, dir);
+    wooshSound.play(); // Jouer le son de rotation
     while (collide(arena, player)) {
         player.pos.x += offset;
         offset = -(offset + (offset > 0 ? 1 : -1));

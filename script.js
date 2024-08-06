@@ -728,3 +728,17 @@ function resetGame() {
     animationFrameId = requestAnimationFrame(update);
     startTimer(); // Démarrer le chronomètre
 }
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const openModalButton = document.getElementById('open-modal-button');
+    const playerSelectModal = document.getElementById('startup-modal');
+
+    openModalButton.addEventListener('click', () => {
+        playerSelectModal.style.display = 'flex';
+        document.querySelector('.home-page').style.display = 'none';
+    });
+
+    displayScores();
+    update();
+});

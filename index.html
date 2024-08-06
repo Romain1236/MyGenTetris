@@ -8,6 +8,13 @@
 	<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
 </head>
 <body>
+
+    <!-- Page d'accueil avec une photo en fond -->
+     <div class="home-page">
+         <img src="images/band.jpg" alt="Band Image" class="background-image">
+         <button id="open-modal-button">Click to start</button>
+    </div>
+
     <!-- Logo de l'Orchestre MyGeneration -->
     <img src="images/mygen_little.PNG" alt="MyGeneration Logo" class="header-image">
     <h1>Tetris - Orchestre MyGeneration</h1>
@@ -103,7 +110,7 @@
     <!--*boite modale indiquant de renseigner le nom du joueur-->
     <div class="modal" id="name-modal">
         <div class="modal-content" id="name-modal-content">
-            <p id="name-modal-message">Please enter a valid player name.</p>
+            <p id="name-modal-message">Player 1 ? That is not your name.</p>
             <button id="name-modal-close">OK</button>
         </div>
     </div>
@@ -111,7 +118,7 @@
     <!-- Boîte modale pour les mots interdits -->
 <div class="modal" id="banned-word-modal">
     <div class="modal-content">
-        <h2>You are better than this</h2>
+        <h2>You are better than this...</h2>
         <button id="banned-word-modal-close">OK</button>
     </div>
 </div>

@@ -1,3 +1,42 @@
+/* Styles pour la page d'accueil */
+.home-page {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.background-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+
+#open-modal-button {
+    background-color: #ff0000;
+    color: #fff;
+	font-family: 'VT323', monospace;
+    font-size: 18px;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.5em;
+}
+
+#open-modal-button:hover {
+    background-color: #cc0000;
+}
+
+
+
 /* Styles de base pour le corps de la page */
 body {
     display: flex;
@@ -166,7 +205,7 @@ h1 {
     padding: 10px;
     border-radius: 5px;
     max-width: 120px;
-    margin-top: 10px; /* Espace entre la sélection du joueur et la prochaine pièce */
+    margin-top: 20px; /* Espace entre la sélection du joueur et la prochaine pièce */
 	margin-right: -40px; /* Espace entre la sélection du joueur et la prochaine pièce */
 }
 
@@ -185,7 +224,7 @@ h1 {
 /* Section des instructions */
 .instructions {
     margin-top: -10px; /* Ajustez la valeur selon vos besoins */
-    margin-left: 40px; /* Ajustez la valeur selon vos besoins */
+    margin-left: 00px; /* Ajustez la valeur selon vos besoins */
     text-align: center;
 }
 
@@ -299,7 +338,7 @@ h1 {
 }
 
 #banned-word-modal .modal-content {
-    background-color: #fff;
+    background-color: #000;
     padding: 20px;
     border-radius: 5px;
     text-align: center;
@@ -310,12 +349,19 @@ h1 {
 }
 
 #banned-word-modal button {
-    padding: 10px 20px;
-    background-color: #007BFF;
+    background-color: #ff0000;
     color: #fff;
+	font-family: 'VT323', monospace;
+    font-size: 18px;
     border: none;
+    padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
+    font-size: 1.5em;
+}
+
+#banned-word-modal button:hover {
+    background-color: #cc0000;
 }
 
 /* Styles pour la boîte modale de démarrage */
@@ -327,6 +373,7 @@ h1 {
     border-radius: 10px;
     max-width: 400px;
     width: 80%;
+    margin-top: 200px;
 }
 
 /* Style pour le message d'erreur */

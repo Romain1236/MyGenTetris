@@ -1,0 +1,420 @@
+/* Styles de base pour le corps de la page */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    background-color: #222;
+    color: #fff;
+    font-family: 'VT323', monospace;
+    font-size: 22px;
+    margin: 0;
+    background-image: url('images/fond.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+/* Style pour l'image du logo */
+.header-image {
+    width: 240px; /* Taille réduite de 50% */
+    margin-bottom: -20px;
+}
+
+/* Style pour le titre principal */
+h1 {
+    margin-bottom: 20px;
+    font-size: 4em; /* Ajustez la taille de la police selon vos besoins */
+    font-weight: bold;
+    background: linear-gradient(to right, violet, indigo, blue, green, yellow, orange, red);
+    -webkit-background-clip: text;
+    color: transparent;
+    background-size: 200% auto;
+    animation: rainbow-text 5s linear infinite;
+}
+
+/* Animation pour le texte arc-en-ciel */
+@keyframes rainbow-text {
+    0% {
+        background-position: 0% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* Conteneur principal */
+.main-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+/* Conteneur pour le jeu Tetris */
+.tetris-container {
+    position: relative;
+    margin-left: 20px; /* Ajoute un espace entre le classement et le conteneur Tetris */
+    width: 360px;
+    height: 600px;
+    background-size: cover;
+    background-position: center;
+}
+
+/* Style pour le canvas du jeu Tetris */
+#tetris {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: 1px solid #fff;
+    background-color: transparent; /* rendre le fond du canvas transparent */
+    z-index: 10; /* Assurez-vous que le canvas est au-dessus de l'image de fond */
+}
+
+/* Animation pour clignoter une ligne complète */
+@keyframes blink {
+    0%, 100% { background-color: rgba(255, 255, 255, 0); }
+    50% { background-color: rgba(255, 255, 255, 1); }
+}
+
+.blink {
+    animation: blink 0.2s linear 2;
+    z-index: 1000; /* Ajoutez un z-index élevé */
+    position: absolute;
+    width: 30px;
+    height: 30px;
+}
+
+/* Style pour l'affichage du score */
+.score {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 18px;
+    z-index: 20;
+}
+
+/* Section de sélection du joueur */
+.player-selection {
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border-radius: 5px;
+    max-width: 200px; /* Limite la largeur de la section */
+    margin-left: 40px; /* Ajoute un espace entre la sélection du joueur et le conteneur Tetris */
+}
+
+/* Style pour le titre de la section de sélection du joueur */
+.player-selection h2 {
+    margin-bottom: 10px;
+    font-size: 1.2em; /* Taille de police réduite */
+}
+
+/* Liste des boutons de sélection du joueur */
+.player-selection ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* Style pour chaque élément de la liste */
+.player-selection li {
+    margin: 5px;
+}
+
+/* Style pour les images de sélection du joueur */
+.player-selection img {
+    width: 50px; /* Ajustez la taille de l'image selon vos besoins */
+    height: 50px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    border-radius: 5px;
+}
+
+.player-selection img:hover {
+    border-color: #fff;
+}
+
+/* Style pour le conteneur du nom du joueur */
+.player-selection div {
+    margin-top: 10px;
+}
+
+/* Style pour le champ de texte du nom du joueur */
+.player-selection input {
+    width: 90%; /* S'adapte à la largeur de la section */
+    padding: 5px; /* Taille réduite de l'entrée */
+    font-family: 'VT323', monospace;
+    font-size: 0.8em; /* Taille de police réduite */
+}
+
+/* Conteneur pour la sélection du joueur et la prochaine pièce */
+.player-selection-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Conteneur pour la prochaine pièce */
+.next-piece-container {
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border-radius: 5px;
+    max-width: 120px;
+    margin-top: 10px; /* Espace entre la sélection du joueur et la prochaine pièce */
+	margin-right: -40px; /* Espace entre la sélection du joueur et la prochaine pièce */
+}
+
+.next-piece-container h2 {
+    margin-bottom: 10px;
+    font-size: 1.2em; /* Taille de police réduite */
+}
+
+#next-piece {
+    background-color: #4a4a4a; /* Fond blanc pour la prochaine pièce */
+    border: 1px solid #000;
+    width: 100px;  /* Assurez-vous que les dimensions du canvas sont correctes */
+    height: 100px;
+}
+
+/* Section des instructions */
+.instructions {
+    margin-top: -10px; /* Ajustez la valeur selon vos besoins */
+    margin-left: 40px; /* Ajustez la valeur selon vos besoins */
+    text-align: center;
+}
+
+/* Style pour le titre des instructions */
+.instructions h2 {
+    margin-bottom: 20px;
+}
+
+/* Liste des instructions */
+.instructions ul {
+    list-style: none;
+    padding: 0;
+}
+
+/* Style pour chaque instruction */
+.instructions li {
+    margin: 12x 0;
+}
+
+/* Section du classement des scores */
+.scoreboard {
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border-radius: 5px;
+    max-width: 200px;
+    margin-bottom: 20px; /* Espace entre le tableau des scores et le chronomètre */
+    margin-right: 20px; /* Ajoute un espace entre le classement et le conteneur Tetris */
+}
+
+.scoreboard h2 {
+    margin-bottom: 10px;
+    font-size: 1.2em; /* Taille de police réduite */
+}
+
+.scoreboard ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+	font-size: 18px /* Taille de police réduite */
+}
+
+.scoreboard li {
+    margin: 5px 0;
+}
+
+/* Style pour le conteneur du chronomètre */
+.timer-container {
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border-radius: 5px;
+    max-width: 200px;
+    margin-top: 10px; /* Ajoute un espace entre le classement et le chronomètre */
+	margin-right: 20px; /* Ajoute un espace entre le classement et le chronomètre */
+}
+
+.timer-container span {
+    font-size: 1em;
+    color: #FFD700; /* Couleur dorée pour le chronomètre */
+}
+
+/* Style de base pour les boîtes modales */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 100;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+/* Style pour le contenu des boîtes modales */
+.modal-content {
+    background-color: #000; /* Couleur vive années 90 */
+    margin: auto;
+    padding: 40px; /* Augmentez la taille de la boîte modale */
+    border: 5px solid #e252f0; /* Bordure épaisse et vive */
+    width: 80%;
+    max-width: 500px;
+    text-align: center;
+    color: #000;
+    font-family: 'VT323', monospace;
+    font-size: 22px;
+    color: #00FF00;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+}
+
+#modal-message {
+    font-size: 1.5em; /* Taille de police plus grande */
+}
+
+/* Styles pour la boîte modale de démarrage */
+#startup-modal .modal-content {
+    background-color: #000;
+    color: #00FF00;
+    text-align: center;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 400px;
+    width: 80%;
+}
+
+#startup-modal h2 {
+    margin-bottom: 20px;
+}
+
+#startup-modal ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+#startup-modal li {
+    margin: 10px;
+}
+
+#startup-modal img {
+    width: 50px; /* Ajustez la taille de l'image selon vos besoins */
+    height: 50px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    border-radius: 5px;
+}
+
+#startup-modal img:hover {
+    border-color: #fff;
+}
+
+#startup-modal div {
+    margin-top: 20px;
+}
+
+#startup-modal input {
+    width: 80%;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #fff;
+    border-radius: 5px;
+    background-color: #222;
+    color: #fff;
+	font-family: 'VT323', monospace;
+    font-size: 22px;
+}
+
+/* Style pour l'affichage du combo */
+.combo-display {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #FFD700; /* Couleur dorée pour le texte */
+    font-family: 'VT323', monospace;
+    font-size: 3em;
+    font-weight: bold;
+    display: none;
+    z-index: 1100; /* Au-dessus des autres éléments */
+    text-shadow: 2px 2px 4px #000000;
+}
+
+/* Animation pour afficher et cacher l'élément combo */
+@keyframes comboAnimation {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.5);
+    }
+    50% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(1.5);
+    }
+}
+
+.combo-show {
+    display: block;
+    animation: comboAnimation 1s ease-in-out;
+}
+
+@keyframes blink-accel {
+    0%, 100% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+.accel-blink {
+    animation: blink-accel 5s infinite;
+}
+
+/* Styles pour la boîte modale de Game Over */
+#gameover-modal .modal-content {
+    background-color: #000;
+    color: #00FF00;
+    text-align: center;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 400px;
+    width: 80%;
+}
+
+#gameover-modal h2 {
+    font-size: 3em;
+    margin-bottom: 60px;
+}
+
+#gameover-modal button {
+    background-color: #ff0000;
+    color: #fff;
+	font-family: 'VT323', monospace;
+    font-size: 18px;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.5em;
+}
+
+#gameover-modal button:hover {
+    background-color: #cc0000;
+}
+

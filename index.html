@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tetris - Orchestre MyGeneration</title>
+    <link rel="stylesheet" href="style.css">
+	<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Logo de l'Orchestre MyGeneration -->
+    <img src="images/mygen_little.PNG" alt="MyGeneration Logo" class="header-image">
+    <h1>Tetris - Orchestre MyGeneration</h1>
+    
+    <!-- Conteneur principal -->
+    <div class="main-container">
+	
+        <!-- Nouveau conteneur pour le tableau des scores et le chronomètre -->
+        <div class="score-timer-container">
+            <!-- Section du classement des scores -->
+            <div class="scoreboard">
+                <h2>Top 10 Scores</h2>
+                <ol id="score-list"></ol>
+            </div>
+
+            <!-- Conteneur pour le chronomètre -->
+            <div class="timer-container">
+                Time : <span id="game-timer">00:00</span>
+            </div>
+        </div>
+
+        <!-- Conteneur du jeu Tetris -->
+        <div class="tetris-container">
+            <canvas id="tetris" width="240" height="400"></canvas>
+            <div class="score">
+                Score: <span id="score">0</span>
+            </div>
+        </div>
+        
+        <!-- Section de sélection du joueur -->
+        <div class="player-selection-wrapper">
+            <div class="player-selection">
+                <h2>Select Your Player</h2>
+                <ul>
+                    <li><img src="images/La_D_ico.webp" class="player-button" data-player="La D" alt="La D"></li>
+                    <li><img src="images/La_N_ico.webp" class="player-button" data-player="La N" alt="La N"></li>
+                    <li><img src="images/Le_L_ico.webp" class="player-button" data-player="Le L" alt="Le L"></li>
+                    <li><img src="images/Le_M_ico.webp" class="player-button" data-player="Le M" alt="Le M"></li>
+                    <li><img src="images/Le_R_ico.webp" class="player-button" data-player="Le R" alt="Le R"></li>
+                    <li><img src="images/Le_S_ico.webp" class="player-button" data-player="Le S" alt="Le S"></li>
+                    <li><img src="images/Le_Gouss_ico.webp" class="player-button" data-player="Le Gouss" alt="Le Gouss"></li>
+                </ul>
+                <div>
+                    <label for="player-name">Player Name: </label>
+                    <input type="text" id="player-name" value="Player 1">
+                </div>
+            </div>
+
+            <!-- Nouveau conteneur pour la prochaine pièce -->
+            <div class="next-piece-container">
+                <h2>Next Piece</h2>
+                <canvas id="next-piece" width="100" height="100"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Boîte modale pour les messages généraux -->
+    <div class="modal" id="modal">
+        <div class="modal-content" id="modal-content">
+            <p id="modal-message"></p>
+        </div>
+    </div>
+    
+    <!-- Boîte modale de démarrage pour la sélection du personnage -->
+    <div class="modal" id="startup-modal">
+        <div class="modal-content" id="startup-modal-content">
+            <h2>Select Your Player</h2>
+            <ul>
+                <li><img src="images/La_D_ico.webp" class="startup-player-button" data-player="La D" alt="La D"></li>
+                <li><img src="images/La_N_ico.webp" class="startup-player-button" data-player="La N" alt="La N"></li>
+                <li><img src="images/Le_L_ico.webp" class="startup-player-button" data-player="Le L" alt="Le L"></li>
+                <li><img src="images/Le_M_ico.webp" class="startup-player-button" data-player="Le M" alt="Le M"></li>
+                <li><img src="images/Le_R_ico.webp" class="startup-player-button" data-player="Le R" alt="Le R"></li>
+                <li><img src="images/Le_S_ico.webp" class="startup-player-button" data-player="Le S" alt="Le S"></li>
+                <li><img src="images/Le_Gouss_ico.webp" class="startup-player-button" data-player="Le Gouss" alt="Le Gouss"></li>
+            </ul>
+            <div>
+                <label for="startup-player-name">Player Name: </label>
+                <input type="text" id="startup-player-name" value="Player 1">
+            </div>
+        </div>
+    </div>
+    
+    <!-- Boîte modale de Game Over -->
+    <div class="modal" id="gameover-modal">
+        <div class="modal-content" id="gameover-modal-content">
+            <h2>Game Over
+                LOOSER  </h2>
+            <button onclick="restartGame()">Restart</button>
+        </div>
+    </div>
+	
+    <!-- Affichage des combos -->
+	<div class="combo-display" id="combo-display">
+	</div>
+
+    <!-- Section des instructions du jeu -->
+    <div class="instructions">
+        <h2>Instructions</h2>
+        <ul>
+            <li>Déplacer à gauche : <strong>Flèche gauche (←)</strong></li>
+            <li>Déplacer à droite : <strong>Flèche droite (→)</strong></li>
+            <li>Descendre plus vite : <strong>Flèche bas (↓)</strong></li>
+            <li>Rotation horaire : <strong>Touche X</strong></li>
+            <li>Rotation antihoraire : <strong>Touche W</strong></li>
+			<li>Mettre en Pause : <strong>Touche P</strong></li>
+        </ul>
+    </div>
+	
+    <!-- Ajout des élément audio -->
+    <audio id="background-music" src="sounds/music_1.mp3" loop></audio>
+	<audio id="woosh-sound" src="sounds/woosh.mp3"></audio>
+    <audio id="line-clear-sound" src="sounds/magic-fairy.mp3"></audio>
+  	
+    <!-- Inclusion du script JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>

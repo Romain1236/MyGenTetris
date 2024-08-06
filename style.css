@@ -479,12 +479,29 @@ h1 {
 }
 
 @keyframes blink-accel {
-    0%, 100% { opacity: 1; }
+    0%, 70% { opacity: 1; }
     100% { opacity: 0; }
 }
 
+.accel-icon {
+    margin-top: 20px; /* Space between timer and icon */
+    width: 200px; /* Adjust size as needed */
+    height: 200px; /* Adjust size as needed */
+    display: none;
+    animation: blink-accel 1s infinite;
+}
+
+/* Position the score-timer-container relatively to contain the accel icon */
+.score-timer-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center align the content */
+}
+
+
 .accel-blink {
-    animation: blink-accel 5s infinite;
+    animation: blink-accel 1s infinite;
 }
 
 /* Styles pour la boîte modale de Game Over */

@@ -29,17 +29,14 @@ backgroundMusic.volume = 0.5;
 const wooshSound = document.getElementById('woosh-sound');
 const lineClearSound = document.getElementById('line-clear-sound');
 
-const accelIcon = document.createElement('img');
-accelIcon.src = 'images/Accel.webp';
-accelIcon.style.position = 'absolute';
-accelIcon.style.top = '50%';
-accelIcon.style.left = '51%';
-accelIcon.style.transform = 'translate(-50%, -50%)';
-accelIcon.style.width = '210px';
-accelIcon.style.height = '210px';
-accelIcon.style.zIndex = '1001';
-accelIcon.style.display = 'none';
-document.body.appendChild(accelIcon);
+const accelIcon = document.getElementById('accel-icon');
+
+function showAccelerationIcon() {
+    accelIcon.style.display = 'block';
+    setTimeout(() => {
+        accelIcon.style.display = 'none';
+    }, 5000);
+}
 
 function startMusicOnInteraction() {
     backgroundMusic.play().catch(error => {
@@ -469,7 +466,7 @@ function update(time = 0) {
     const elapsedTime = Date.now() - startTime;
     if (elapsedTime - lastAcceleration > 60000) {
         lastAcceleration = elapsedTime;
-        dropInterval *= 0.9;
+        dropInterval *= 0.8;
         showAccelerationIcon();
     }
 

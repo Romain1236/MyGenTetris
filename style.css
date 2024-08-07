@@ -538,3 +538,19 @@ h1 {
     background-color: #cc0000;
 }
 
+/* Styles pour le bouton Mute */
+.mute-button {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.mute-button img {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    transition: filter 0.3s;
+}
+
+.mute-button img.muted {
+    filter: brightness(0.5);
+}

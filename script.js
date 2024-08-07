@@ -49,6 +49,9 @@ function startMusicOnInteraction() {
 document.addEventListener('click', startMusicOnInteraction);
 document.addEventListener('keydown', startMusicOnInteraction);
 
+
+
+
 // =====================
 // Gestion du Chronomètre
 // =====================
@@ -276,7 +279,7 @@ function playerReset() {
     player.pos.x = (arena[0].length / 2 | 0) - (player.matrix[0].length / 2 | 0);
 
     nextPieceMatrix = createPiece(pieces[pieces.length * Math.random() | 0]);
-    drawMatrix(nextPieceMatrix, { x: 2, y: 2 }, nextContext, true);
+    drawMatrix(nextPieceMatrix, { x: 1, y: 1 }, nextContext, true);
 
     if (collide(arena, player)) {
         showGameOverModal();
@@ -705,10 +708,37 @@ function changeBackground(player) {
 // =====================
 
 document.addEventListener('DOMContentLoaded', () => {
-    showStartupModal();
+    const openModalButton = document.getElementById('open-modal-button');
+    const playerSelectModal = document.getElementById('startup-modal');
+    const muteButton = document.getElementById('mute-button');
+    let isMuted = false;
+
+    openModalButton.addEventListener('click', () => {
+        playerSelectModal.style.display = 'flex';
+        document.querySelector('.home-page').style.display = 'none';
+    });
+
+    muteButton.addEventListener('click', () => {
+        isMuted = !isMuted;
+        backgroundMusic.muted = isMuted;
+        muteButton.textContent = isMuted ? 'Unmute' : 'Mute';
+        muteButton.classList.toggle('muted', isMuted);
+    });
+
     displayScores();
     update();
 });
+
+function startMusicOnInteraction() {
+    backgroundMusic.play().catch(error => {
+        console.log('Autoplay was prevented:', error);
+    });
+    document.removeEventListener('click', startMusicOnInteraction);
+    document.removeEventListener('keydown', startMusicOnInteraction);
+}
+
+document.addEventListener('click', startMusicOnInteraction);
+document.addEventListener('keydown', startMusicOnInteraction);
 
 // Fonction pour réinitialiser le jeu
 function resetGame() {

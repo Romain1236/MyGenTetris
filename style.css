@@ -339,6 +339,7 @@ h1 {
 
 #banned-word-modal .modal-content {
     background-color: #000;
+    font-size: 32px;
     padding: 20px;
     border-radius: 5px;
     text-align: center;
@@ -487,6 +488,7 @@ h1 {
     margin-top: 20px; /* Space between timer and icon */
     width: 200px; /* Adjust size as needed */
     height: 200px; /* Adjust size as needed */
+    border-radius: 5px;
     display: none;
     animation: blink-accel 1s infinite;
 }

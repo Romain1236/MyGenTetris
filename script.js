@@ -6,7 +6,7 @@ const canvas = document.getElementById('tetris');
 const context = canvas.getContext('2d');
 const nextCanvas = document.getElementById('next-piece');
 const nextContext = nextCanvas.getContext('2d');
-const bannedWords = ['bite', 'pute', 'salope', 'chatte', 'nichon', 'encule', 'enculé', 'hitler', 'adolf']; // Remplacez par les mots interdits réels
+const bannedWords = ['bite', 'pute', 'salope', 'chatte', 'nichon', 'encule', 'enculé', 'hitler', 'adolf', "Zemmour", ]; // Remplacez par les mots interdits réels
 
 canvas.width = 240;
 canvas.height = 400;
@@ -557,7 +557,7 @@ document.querySelectorAll('.player-button').forEach(button => {
         player.name = playerName;
         resetGame();
         hideModal();
-        showModal(`${button.dataset.player} ! T'y a changé le kimono !`);
+        showModal(`<p>${button.dataset.player}</p><p>T'y as changé le kimono !</p>`);
         changeBackground(button.dataset.player);
     });
 });
@@ -582,7 +582,7 @@ document.querySelectorAll('.startup-player-button').forEach(button => {
         document.getElementById('player-name').value = playerName;
         hideStartupModal();
         resetGame();
-        showModal(`${button.dataset.player} ! T'y a mis le kimono !`);
+        showModal(`<p>${button.dataset.player}</p><p>T'y as mis le kimono !</p>`);
         changeBackground(button.dataset.player);
     });
 });
@@ -613,6 +613,7 @@ function showModal(message) {
     const modal = document.getElementById('modal');
     const modalMessage = document.getElementById('modal-message');
     modalMessage.textContent = message;
+    modalMessage.innerHTML = message; // Utilisation de innerHTML pour définir le contenu HTM
     modal.style.display = 'flex';
     isPaused = true;
     cancelAnimationFrame(animationFrameId);
@@ -687,7 +688,7 @@ function changeBackground(player) {
             tetrisContainer.style.backgroundImage = "url('images/Le_R.jpg')";
             break;
         case 'Le S':
-            tetrisContainer.style.backgroundImage = "url('images/Le_S.jpg')";
+            tetrisContainer.style.backgroundImage = "url('images/Le_N.jpg')";
             break;
         case 'Le Gouss':
             tetrisContainer.style.backgroundImage = "url('images/Le_Gouss.jpg')";

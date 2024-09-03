@@ -44,6 +44,7 @@ body {
     align-items: center;
     flex-direction: column;
     height: 100vh;
+    overflow: hidden; /* Empêche les barres de défilement */
     background-color: #222;
     color: #fff;
     font-family: 'VT323', monospace;
@@ -63,7 +64,7 @@ body {
 /* Style pour le titre principal */
 h1 {
     margin-bottom: 20px;
-    font-size: 4em; /* Ajustez la taille de la police selon vos besoins */
+    font-size: clamp (3rem, 5vw, 4em); /* Ajustez la taille de la police selon vos besoins */
     font-weight: bold;
     background: linear-gradient(to right, violet, indigo, blue, green, yellow, orange, red);
     -webkit-background-clip: text;
@@ -87,6 +88,7 @@ h1 {
     display: flex;
     justify-content: center;
     align-items: flex-start;
+    overflow: hidden; /* Assure qu'aucun débordement ne provoque le défilement */
 }
 
 /* Conteneur pour le jeu Tetris */
@@ -97,6 +99,7 @@ h1 {
     height: 600px;
     background-size: cover;
     background-position: center;
+    overflow: hidden; /* Assure qu'aucun débordement ne provoque le défilement */
 }
 
 /* Style pour le canvas du jeu Tetris */
@@ -187,8 +190,10 @@ h1 {
 .player-selection input {
     width: 90%; /* S'adapte à la largeur de la section */
     padding: 5px; /* Taille réduite de l'entrée */
+    background-color: rgba(0, 0, 0, 0.5);
     font-family: 'VT323', monospace;
     font-size: 0.8em; /* Taille de police réduite */
+    color : #fff;
 }
 
 /* Conteneur pour la sélection du joueur et la prochaine pièce */
@@ -202,11 +207,12 @@ h1 {
 .next-piece-container {
     text-align: center;
     background-color: rgba(0, 0, 0, 0.5);
-    padding: 10px;
+    padding: 5px;
     border-radius: 5px;
     max-width: 120px;
     margin-top: 20px; /* Espace entre la sélection du joueur et la prochaine pièce */
 	margin-right: -40px; /* Espace entre la sélection du joueur et la prochaine pièce */
+    overflow: hidden; /* Assure qu'aucun débordement ne provoque le défilement */
 }
 
 .next-piece-container h2 {
@@ -219,29 +225,6 @@ h1 {
     border: 1px solid #000;
     width: 100px;  /* Assurez-vous que les dimensions du canvas sont correctes */
     height: 100px;
-}
-
-/* Section des instructions */
-.instructions {
-    margin-top: -10px; /* Ajustez la valeur selon vos besoins */
-    margin-left: 00px; /* Ajustez la valeur selon vos besoins */
-    text-align: center;
-}
-
-/* Style pour le titre des instructions */
-.instructions h2 {
-    margin-bottom: 20px;
-}
-
-/* Liste des instructions */
-.instructions ul {
-    list-style: none;
-    padding: 0;
-}
-
-/* Style pour chaque instruction */
-.instructions li {
-    margin: 12x 0;
 }
 
 /* Section du classement des scores */
@@ -280,6 +263,7 @@ h1 {
     max-width: 200px;
     margin-top: 10px; /* Ajoute un espace entre le classement et le chronomètre */
 	margin-right: 20px; /* Ajoute un espace entre le classement et le chronomètre */
+    overflow: hidden; /* Assure qu'aucun débordement ne provoque le défilement */
 }
 
 .timer-container span {
@@ -486,11 +470,13 @@ h1 {
 
 .accel-icon {
     margin-top: 20px; /* Space between timer and icon */
-    width: 200px; /* Adjust size as needed */
-    height: 200px; /* Adjust size as needed */
-    border-radius: 5px;
+    width: 180px; /* Adjust size as needed */
+    height: 180px; /* Adjust size as needed */
+    border-radius: 25px;
     display: none;
     animation: blink-accel 1s infinite;
+    border: 2px solid transparent;
+    border-radius: 25px;
 }
 
 /* Position the score-timer-container relatively to contain the accel icon */
@@ -499,6 +485,7 @@ h1 {
     display: flex;
     flex-direction: column;
     align-items: center; /* Center align the content */
+    overflow: hidden; /* Assure qu'aucun débordement ne provoque le défilement */
 }
 
 
@@ -538,13 +525,23 @@ h1 {
     background-color: #cc0000;
 }
 
+
 /* Styles pour le bouton Mute */
 .mute-button {
     text-align: center;
     margin-top: 10px;
+    border-radius: 5px;
 }
 
-.mute-button img {
+/* Styles pour le bouton instruction */
+.instructions-icon {
+    text-align: center;
+    margin-top: 10px;
+    border-radius: 100px;
+}
+
+
+.mute-button img, .instructions-icon img {
     width: 40px;
     height: 40px;
     cursor: pointer;
@@ -553,4 +550,36 @@ h1 {
 
 .mute-button img.muted {
     filter: brightness(0.5);
+}
+
+/* Aligner les boutons mute et instructions côte à côte */
+.mute-button, .instructions-icon {
+    display: inline-flex; /* Affichage en ligne */
+    margin-top: 10px; /* Espace par rapport au canvas */
+}
+
+
+/* Style pour la boîte modale d'instructions */
+#instructions-modal .modal-content {
+    background-color: #000;
+    color: #00FF00;
+    text-align: center;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 600px;
+    width: 100%;
+}
+
+#instructions-modal {
+    display: none;
+    position: fixed;
+    z-index: 100;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
 }

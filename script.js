@@ -7,6 +7,9 @@ const context = canvas.getContext('2d');
 const nextCanvas = document.getElementById('next-piece');
 const nextContext = nextCanvas.getContext('2d');
 const bannedWords = ['bite', 'pute', 'salope', 'chatte', 'nichon', 'encule', 'enculé', 'hitler', 'adolf', "Zemmour", ]; // Remplacez par les mots interdits réels
+const instructionsButton = document.getElementById('instructions-button');
+const instructionsModal = document.getElementById('instructions-modal');
+const closeInstructionsButton = document.getElementById('close-instructions');
 
 canvas.width = 240;
 canvas.height = 400;
@@ -22,6 +25,7 @@ let timerInterval;
 let startTime;
 let elapsedTimeBeforePause = 0;
 let nextPieceMatrix = null;
+let firstLaunch = true;
 
 const backgroundMusic = document.getElementById('background-music');
 backgroundMusic.volume = 0.5;
@@ -569,6 +573,7 @@ document.getElementById('player-name').addEventListener('input', event => {
     player.name = event.target.value;
 });
 
+// Afficher la boîte modale des instructions après le choix du personnage seulement au démarrage
 document.querySelectorAll('.startup-player-button').forEach(button => {
     button.addEventListener('click', () => {
         const playerName = document.getElementById('startup-player-name').value;
@@ -585,6 +590,13 @@ document.querySelectorAll('.startup-player-button').forEach(button => {
         document.getElementById('player-name').value = playerName;
         hideStartupModal();
         resetGame();
+        
+        // Afficher les instructions uniquement au premier lancement
+        if (firstLaunch) {
+            showInstructionsModal();
+            firstLaunch = false; // Empêche l'affichage multiple à chaque redémarrage
+        }
+
         showModal(`<p>${button.dataset.player}</p><p>T'y as mis le kimono !</p>`);
         changeBackground(button.dataset.player);
     });
@@ -770,3 +782,31 @@ document.addEventListener('DOMContentLoaded', () => {
     displayScores();
     update();
 });
+
+instructionsButton.addEventListener('click', () => {
+    // Met le jeu en pause
+    isPaused = true;
+    cancelAnimationFrame(animationFrameId);
+    clearInterval(timerInterval);
+    
+    // Affiche la boîte modale des instructions
+    instructionsModal.style.display = 'flex';
+});
+
+closeInstructionsButton.addEventListener('click', () => {
+    // Ferme la boîte modale des instructions
+    instructionsModal.style.display = 'none';
+
+    // Reprend le jeu
+    isPaused = false;
+    animationFrameId = requestAnimationFrame(update);
+    startTimer();
+});
+
+// Fonction pour afficher la boîte modale des instructions
+function showInstructionsModal() {
+    isPaused = true; // Met le jeu en pause
+    cancelAnimationFrame(animationFrameId); // Arrête l'animation du jeu
+    clearInterval(timerInterval); // Arrête le chronomètre
+    instructionsModal.style.display = 'flex'; // Affiche la boîte modale
+}

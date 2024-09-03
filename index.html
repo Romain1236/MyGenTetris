@@ -23,7 +23,7 @@
     <!-- Conteneur principal -->
     <div class="main-container">
 	
-        <!-- Nouveau conteneur pour le tableau des scores, le chronomètre, et le logo Accel -->
+        <!-- Conteneur pour le tableau des scores, le chronomètre, et le logo Accel -->
         <div class="score-timer-container">
             <!-- Section du classement des scores -->
             <div class="scoreboard">
@@ -49,7 +49,7 @@
             </div>
         </div>
         
-        <!-- Section de sélection du joueur -->
+        <!-- COnteneur section de sélection du joueur -->
         <div class="player-selection-wrapper">
             <div class="player-selection">
                 <h2>Select Your Player</h2>
@@ -76,6 +76,11 @@
                  <!-- Bouton Mute -->
                 <div class="mute-button">
                      <img id="mute-button" src="images/mute.webp" alt="Mute Button" class="mute-button">
+                </div>
+                
+                 <!-- Icône pour les instructions -->
+                <div class="instructions-icon">
+                     <img src="images/Instructions.webp" alt="Instructions" id="instructions-button">
                 </div>
             </div>
         </div>
@@ -138,8 +143,9 @@
 	<div class="combo-display" id="combo-display">
 	</div>
 
-    <!-- Section des instructions du jeu -->
-    <div class="instructions">
+   <!-- Boîte modale pour les instructions -->
+<div class="modal" id="instructions-modal">
+    <div class="modal-content">
         <h2>Instructions</h2>
         <ul>
             <li>Déplacer à gauche : <strong>Flèche gauche (←)</strong></li>
@@ -147,16 +153,16 @@
             <li>Descendre plus vite : <strong>Flèche bas (↓)</strong></li>
             <li>Rotation horaire : <strong>Touche X</strong></li>
             <li>Rotation antihoraire : <strong>Touche W</strong></li>
-			<li>Mettre en Pause : <strong>Touche P</strong></li>
+            <li>Mettre en Pause : <strong>Touche P</strong></li>
         </ul>
+        <button id="close-instructions">Fermer</button>
     </div>
+</div>
 	
     <!-- Ajout des élément audio -->
     <audio id="background-music" src="sounds/music_1.mp3" loop></audio>
 	<audio id="woosh-sound" src="sounds/woosh.mp3"></audio>
     <audio id="line-clear-sound" src="sounds/magic-fairy.mp3"></audio>
-
-
 
     <!-- Inclusion du script JavaScript -->
     <script src="script.js"></script>

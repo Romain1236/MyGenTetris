@@ -64,7 +64,7 @@ body {
 /* Style pour le titre principal */
 h1 {
     margin-bottom: 20px;
-    font-size: clamp (3rem, 5vw, 4em); /* Ajustez la taille de la police selon vos besoins */
+    font-size: 5vw; /* Ajustez la taille de la police selon vos besoins */
     font-weight: bold;
     background: linear-gradient(to right, violet, indigo, blue, green, yellow, orange, red);
     -webkit-background-clip: text;

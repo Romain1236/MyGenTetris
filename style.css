@@ -58,13 +58,15 @@ body {
 /* Style pour l'image du logo */
 .header-image {
     width: 240px; /* Taille réduite de 50% */
-    margin-bottom: -20px;
+    margin-bottom: 0px;
+    margin-top: 20px;
 }
 
 /* Style pour le titre principal */
 h1 {
+    margin-top: 20px;
     margin-bottom: 20px;
-    font-size: 5vw; /* Ajustez la taille de la police selon vos besoins */
+    font-size: 4vw; /* Ajustez la taille de la police selon vos besoins */
     font-weight: bold;
     background: linear-gradient(to right, violet, indigo, blue, green, yellow, orange, red);
     -webkit-background-clip: text;
@@ -470,8 +472,8 @@ h1 {
 
 .accel-icon {
     margin-top: 20px; /* Space between timer and icon */
-    width: 180px; /* Adjust size as needed */
-    height: 180px; /* Adjust size as needed */
+    width: 150px; /* Adjust size as needed */
+    height: 150px; /* Adjust size as needed */
     border-radius: 25px;
     display: none;
     animation: blink-accel 1s infinite;

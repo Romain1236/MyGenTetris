@@ -6,7 +6,7 @@ const canvas = document.getElementById('tetris');
 const context = canvas.getContext('2d');
 const nextCanvas = document.getElementById('next-piece');
 const nextContext = nextCanvas.getContext('2d');
-const bannedWords = ['bite', 'pute', 'salope', 'chatte', 'nichon', 'encule', 'enculé', 'hitler', 'adolf', "Zemmour", ]; // Remplacez par les mots interdits réels
+const bannedWords = ['bite', 'pute', 'salope', 'chatte', 'nichon', 'encule', 'enculé', 'hitler', 'adolf', "Zemmour"];
 const instructionsButton = document.getElementById('instructions-button');
 const instructionsModal = document.getElementById('instructions-modal');
 const closeInstructionsButton = document.getElementById('close-instructions');
@@ -14,8 +14,8 @@ const closeInstructionsButton = document.getElementById('close-instructions');
 canvas.width = 240;
 canvas.height = 400;
 
-context.scale(20, 20);  // Échelle mise à jour pour correspondre à la taille du canvas
-nextContext.scale(20, 20); // Échelle pour la prochaine pièce
+context.scale(20, 20);
+nextContext.scale(20, 20);
 
 let isPaused = true;
 let animationFrameId;
@@ -35,12 +35,9 @@ const lineClearSound = document.getElementById('line-clear-sound');
 
 const accelIcon = document.getElementById('accel-icon');
 
-function showAccelerationIcon() {
-    accelIcon.style.display = 'block';
-    setTimeout(() => {
-        accelIcon.style.display = 'none';
-    }, 5000);
-}
+// =====================
+// Musique (déclarée UNE SEULE FOIS - correction : doublon supprimé)
+// =====================
 
 function startMusicOnInteraction() {
     backgroundMusic.play().catch(error => {
@@ -53,8 +50,19 @@ function startMusicOnInteraction() {
 document.addEventListener('click', startMusicOnInteraction);
 document.addEventListener('keydown', startMusicOnInteraction);
 
+// =====================
+// Affichage et Animation
+// =====================
 
-
+// Correction : showAccelerationIcon déclarée UNE SEULE FOIS (doublon supprimé)
+function showAccelerationIcon() {
+    accelIcon.style.display = 'block';
+    accelIcon.classList.add('accel-blink');
+    setTimeout(() => {
+        accelIcon.style.display = 'none';
+        accelIcon.classList.remove('accel-blink');
+    }, 5000);
+}
 
 // =====================
 // Gestion du Chronomètre
@@ -69,7 +77,11 @@ function updateTimer() {
     const elapsedTime = Date.now() - startTime;
     const minutes = Math.floor(elapsedTime / 60000);
     const seconds = Math.floor((elapsedTime % 60000) / 1000);
-    document.getElementById('game-timer').textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    const timeStr = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    document.getElementById('game-timer').textContent = timeStr;
+    // Synchronise aussi le timer mobile affiché dans l'arène
+    const mobileTimer = document.getElementById('game-timer-mobile');
+    if (mobileTimer) mobileTimer.textContent = timeStr;
 }
 
 function resetTimer() {
@@ -245,7 +257,6 @@ function rotate(matrix, dir) {
             [matrix[x][y], matrix[y][x]] = [matrix[y][x], matrix[x][y]];
         }
     }
-
     if (dir > 0) {
         matrix.forEach(row => row.reverse());
     } else {
@@ -299,11 +310,10 @@ function playerReset() {
 }
 
 function arenaSweep() {
-    let rowCount = 0;
+    // Correction : label 'outer:' supprimé car il n'était jamais utilisé
     const rowsToRemove = [];
 
-    // Identifier les lignes complètes
-    outer: for (let y = arena.length - 1; y > 0; --y) {
+    for (let y = arena.length - 1; y > 0; --y) {
         let isComplete = true;
         for (let x = 0; x < arena[y].length; ++x) {
             if (arena[y][x] === 0) {
@@ -314,23 +324,19 @@ function arenaSweep() {
 
         if (isComplete) {
             rowsToRemove.push(y);
-            // Jouer le son de validation de ligne
-            lineClearSound.play();
-
-            // Ajouter une classe d'animation à chaque cellule de la ligne complète
+            // Correction : le son est joué UNE SEULE FOIS après la boucle (évite les sons multiples simultanés)
             for (let x = 0; x < arena[y].length; ++x) {
                 let cell = document.createElement('div');
                 cell.style.position = 'absolute';
-                cell.style.width = '30px';  // Ajusté pour correspondre à l'échelle
-                cell.style.height = '30px'; // Ajusté pour correspondre à l'échelle
+                cell.style.width = '30px';
+                cell.style.height = '30px';
                 cell.style.left = `${x * 30}px`;
                 cell.style.top = `${y * 30}px`;
                 cell.style.backgroundColor = colors[arena[y][x]];
                 cell.classList.add('blink');
-                cell.style.zIndex = 1000;  // Assurez-vous que les divs sont au-dessus du canvas
+                cell.style.zIndex = 1000;
                 canvas.parentElement.appendChild(cell);
 
-                // Retirer l'animation après un court délai
                 setTimeout(() => {
                     canvas.parentElement.removeChild(cell);
                 }, 600);
@@ -338,7 +344,11 @@ function arenaSweep() {
         }
     }
 
-    // Retirer les lignes complètes après l'animation
+    // Jouer le son UNE SEULE FOIS si au moins une ligne est complète
+    if (rowsToRemove.length > 0) {
+        lineClearSound.play();
+    }
+
     setTimeout(() => {
         for (let i = rowsToRemove.length - 1; i >= 0; i--) {
             const row = arena.splice(rowsToRemove[i], 1)[0].fill(0);
@@ -362,26 +372,25 @@ function arenaSweep() {
                     break;
                 case 4:
                     scoreMultiplier = 5;
-                    comboText = "Combo x5";
+                    comboText = "Combo x5 - TETRIS !";
                     break;
             }
             player.score += 10 * rowsToRemove.length * scoreMultiplier;
             updateScore();
             if (rowsToRemove.length > 1) {
-                showCombo(comboText, scoreMultiplier); // Afficher l'animation de combo avec la taille et le volume appropriés
+                showCombo(comboText, scoreMultiplier);
             }
         }
     }, 600);
 }
 
-// Fonction pour afficher l'animation de combo
 function showCombo(text, multiplier) {
     const comboDisplay = document.getElementById('combo-display');
     comboDisplay.textContent = text;
-    
+
     let fontSize;
     let volume;
-    
+
     switch(multiplier) {
         case 1.5:
             fontSize = '1.5em';
@@ -399,18 +408,17 @@ function showCombo(text, multiplier) {
             fontSize = '1em';
             volume = 0.3;
     }
-    
+
     comboDisplay.style.fontSize = fontSize;
     lineClearSound.volume = volume;
     lineClearSound.play();
-    
+
     comboDisplay.classList.add('combo-show');
     setTimeout(() => {
         comboDisplay.classList.remove('combo-show');
     }, 1000);
 }
 
-// Fonction pour afficher l'écran "Game Over"
 function showGameOverModal() {
     const gameoverModal = document.getElementById('gameover-modal');
     gameoverModal.style.display = 'flex';
@@ -419,13 +427,11 @@ function showGameOverModal() {
     clearInterval(timerInterval);
 }
 
-// Fonction pour redémarrer le jeu après "Game Over"
 function restartGame() {
     hideGameOverModal();
     resetGame();
 }
 
-// Fonction pour cacher l'écran "Game Over"
 function hideGameOverModal() {
     const gameoverModal = document.getElementById('gameover-modal');
     gameoverModal.style.display = 'none';
@@ -439,7 +445,7 @@ function playerRotate(dir) {
     const pos = player.pos.x;
     let offset = 1;
     rotate(player.matrix, dir);
-    wooshSound.play(); // Jouer le son de rotation
+    wooshSound.play();
     while (collide(arena, player)) {
         player.pos.x += offset;
         offset = -(offset + (offset > 0 ? 1 : -1));
@@ -464,8 +470,8 @@ function update(time = 0) {
     }
 
     const deltaTime = time - lastTime;
-
     dropCounter += deltaTime;
+
     if (dropCounter > dropInterval) {
         playerDrop();
     }
@@ -478,22 +484,8 @@ function update(time = 0) {
     }
 
     lastTime = time;
-
     draw();
     animationFrameId = requestAnimationFrame(update);
-}
-
-// =====================
-// Affichage et Animation
-// =====================
-
-function showAccelerationIcon() {
-    accelIcon.style.display = 'block';
-    accelIcon.classList.add('accel-blink');
-    setTimeout(() => {
-        accelIcon.style.display = 'none';
-        accelIcon.classList.remove('accel-blink');
-    }, 5000);
 }
 
 function updateScore() {
@@ -530,7 +522,7 @@ const player = {
 };
 
 // =====================
-// Gestion des Interactions Utilisateur
+// Gestion des Interactions Clavier
 // =====================
 
 document.addEventListener('keydown', event => {
@@ -548,6 +540,10 @@ document.addEventListener('keydown', event => {
         togglePause();
     }
 });
+
+// =====================
+// Sélection du Joueur (sidebar)
+// =====================
 
 document.querySelectorAll('.player-button').forEach(button => {
     button.addEventListener('click', () => {
@@ -573,7 +569,10 @@ document.getElementById('player-name').addEventListener('input', event => {
     player.name = event.target.value;
 });
 
-// Afficher la boîte modale des instructions après le choix du personnage seulement au démarrage
+// =====================
+// Sélection du Joueur (startup modal)
+// =====================
+
 document.querySelectorAll('.startup-player-button').forEach(button => {
     button.addEventListener('click', () => {
         const playerName = document.getElementById('startup-player-name').value;
@@ -590,11 +589,10 @@ document.querySelectorAll('.startup-player-button').forEach(button => {
         document.getElementById('player-name').value = playerName;
         hideStartupModal();
         resetGame();
-        
-        // Afficher les instructions uniquement au premier lancement
+
         if (firstLaunch) {
             showInstructionsModal();
-            firstLaunch = false; // Empêche l'affichage multiple à chaque redémarrage
+            firstLaunch = false;
         }
 
         showModal(`<p>${button.dataset.player}</p><p>T'y as mis le kimono !</p>`);
@@ -602,33 +600,35 @@ document.querySelectorAll('.startup-player-button').forEach(button => {
     });
 });
 
-
 // =====================
-// Gestion des mots interdits
+// Gestion des Mots Interdits
 // =====================
 
-// Fonction pour vérifier les mots interdits
 function containsBannedWord(name) {
     return bannedWords.some(word => name.toLowerCase().includes(word));
 }
 
-// Fonction pour afficher le message "You are better than this"
 function showBannedWordModal() {
     const bannedWordModal = document.getElementById('banned-word-modal');
     bannedWordModal.style.display = 'flex';
 }
 
+function hideBannedWordModal() {
+    const bannedWordModal = document.getElementById('banned-word-modal');
+    bannedWordModal.style.display = 'none';
+}
 
+document.getElementById('banned-word-modal-close').addEventListener('click', hideBannedWordModal);
 
 // =====================
-// Gestion de la Boîte Modale
+// Gestion des Boîtes Modales
 // =====================
 
 function showModal(message) {
     const modal = document.getElementById('modal');
     const modalMessage = document.getElementById('modal-message');
-    modalMessage.textContent = message;
-    modalMessage.innerHTML = message; // Utilisation de innerHTML pour définir le contenu HTM
+    // Correction : textContent supprimé, on garde uniquement innerHTML pour éviter la double écriture
+    modalMessage.innerHTML = message;
     modal.style.display = 'flex';
     isPaused = true;
     cancelAnimationFrame(animationFrameId);
@@ -673,20 +673,13 @@ function hideNameModal() {
     nameModal.style.display = 'none';
 }
 
-function hideBannedWordModal() {
-    const bannedWordModal = document.getElementById('banned-word-modal');
-    bannedWordModal.style.display = 'none';
-}
-
-document.getElementById('banned-word-modal-close').addEventListener('click', hideBannedWordModal);
-
 // =====================
 // Gestion de l'Arrière-plan
 // =====================
 
-function changeBackground(player) {
+function changeBackground(playerChar) {
     const tetrisContainer = document.querySelector('.tetris-container');
-    switch(player) {
+    switch(playerChar) {
         case 'La D':
             tetrisContainer.style.backgroundImage = "url('images/La_D.jpg')";
             break;
@@ -716,7 +709,7 @@ function changeBackground(player) {
 }
 
 // =====================
-// Initialisation
+// Initialisation (déclarée UNE SEULE FOIS - correction : doublon supprimé)
 // =====================
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -733,80 +726,130 @@ document.addEventListener('DOMContentLoaded', () => {
     muteButton.addEventListener('click', () => {
         isMuted = !isMuted;
         backgroundMusic.muted = isMuted;
-        muteButton.textContent = isMuted ? 'Unmute' : 'Mute';
+        // Correction : muteButton est une <img>, pas un bouton texte — on toggle la classe CSS 'muted' uniquement
         muteButton.classList.toggle('muted', isMuted);
     });
 
     displayScores();
     update();
+
+    // =====================
+    // Contrôles tactiles mobiles
+    // =====================
+
+    // Boutons on-screen
+    function addTouchBtn(id, action) {
+        const btn = document.getElementById(id);
+        if (!btn) return;
+        // touchstart pour réactivité immédiate
+        btn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            action();
+        }, { passive: false });
+        // fallback click pour souris
+        btn.addEventListener('click', action);
+    }
+
+    addTouchBtn('btn-left',         () => playerMove(-1));
+    addTouchBtn('btn-right',        () => playerMove(1));
+    addTouchBtn('btn-down',         () => playerDrop());
+    addTouchBtn('btn-rotate-left',  () => playerRotate(-1));
+    addTouchBtn('btn-rotate-right', () => playerRotate(1));
+    addTouchBtn('btn-pause-mobile', () => togglePause());
+
+    // Bouton mute mobile
+    const btnMuteMobile = document.getElementById('btn-mute-mobile');
+    if (btnMuteMobile) {
+        let isMutedMobile = false;
+        btnMuteMobile.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            isMutedMobile = !isMutedMobile;
+            backgroundMusic.muted = isMutedMobile;
+            btnMuteMobile.textContent = isMutedMobile ? '🔇' : '🔊';
+        }, { passive: false });
+        btnMuteMobile.addEventListener('click', () => {
+            isMutedMobile = !isMutedMobile;
+            backgroundMusic.muted = isMutedMobile;
+            btnMuteMobile.textContent = isMutedMobile ? '🔇' : '🔊';
+        });
+    }
+
+    // Swipe sur l'arène (alternative aux boutons)
+    const tetrisEl = document.getElementById('tetris');
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchStartTime = 0;
+
+    tetrisEl.addEventListener('touchstart', (e) => {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+        touchStartTime = Date.now();
+    }, { passive: true });
+
+    tetrisEl.addEventListener('touchend', (e) => {
+        const dx = e.changedTouches[0].clientX - touchStartX;
+        const dy = e.changedTouches[0].clientY - touchStartY;
+        const dt = Date.now() - touchStartTime;
+        const absDx = Math.abs(dx);
+        const absDy = Math.abs(dy);
+
+        // Tap court = rotation
+        if (absDx < 15 && absDy < 15 && dt < 250) {
+            playerRotate(1);
+            return;
+        }
+        // Swipe horizontal
+        if (absDx > absDy && absDx > 30) {
+            playerMove(dx > 0 ? 1 : -1);
+        }
+        // Swipe bas = descente rapide
+        if (absDy > absDx && dy > 30) {
+            playerDrop();
+        }
+    }, { passive: true });
 });
 
-function startMusicOnInteraction() {
-    backgroundMusic.play().catch(error => {
-        console.log('Autoplay was prevented:', error);
-    });
-    document.removeEventListener('click', startMusicOnInteraction);
-    document.removeEventListener('keydown', startMusicOnInteraction);
-}
+// =====================
+// Réinitialisation du Jeu
+// =====================
 
-document.addEventListener('click', startMusicOnInteraction);
-document.addEventListener('keydown', startMusicOnInteraction);
-
-// Fonction pour réinitialiser le jeu
 function resetGame() {
     arena.forEach(row => row.fill(0));
     playerReset();
     updateScore();
-    resetTimer(); // Réinitialiser le chronomètre
+    resetTimer();
     dropCounter = 0;
     isPaused = false;
-    dropInterval = 1000; // Réinitialiser l'intervalle de chute
-    lastAcceleration = 0; // Réinitialiser le temps de la dernière accélération
+    dropInterval = 1000;
+    lastAcceleration = 0;
     if (animationFrameId) {
         cancelAnimationFrame(animationFrameId);
     }
     animationFrameId = requestAnimationFrame(update);
-    startTimer(); // Démarrer le chronomètre
+    startTimer();
 }
 
-
-document.addEventListener('DOMContentLoaded', () => {
-    const openModalButton = document.getElementById('open-modal-button');
-    const playerSelectModal = document.getElementById('startup-modal');
-
-    openModalButton.addEventListener('click', () => {
-        playerSelectModal.style.display = 'flex';
-        document.querySelector('.home-page').style.display = 'none';
-    });
-
-    displayScores();
-    update();
-});
+// =====================
+// Instructions
+// =====================
 
 instructionsButton.addEventListener('click', () => {
-    // Met le jeu en pause
     isPaused = true;
     cancelAnimationFrame(animationFrameId);
     clearInterval(timerInterval);
-    
-    // Affiche la boîte modale des instructions
     instructionsModal.style.display = 'flex';
 });
 
 closeInstructionsButton.addEventListener('click', () => {
-    // Ferme la boîte modale des instructions
     instructionsModal.style.display = 'none';
-
-    // Reprend le jeu
     isPaused = false;
     animationFrameId = requestAnimationFrame(update);
     startTimer();
 });
 
-// Fonction pour afficher la boîte modale des instructions
 function showInstructionsModal() {
-    isPaused = true; // Met le jeu en pause
-    cancelAnimationFrame(animationFrameId); // Arrête l'animation du jeu
-    clearInterval(timerInterval); // Arrête le chronomètre
-    instructionsModal.style.display = 'flex'; // Affiche la boîte modale
+    isPaused = true;
+    cancelAnimationFrame(animationFrameId);
+    clearInterval(timerInterval);
+    instructionsModal.style.display = 'flex';
 }

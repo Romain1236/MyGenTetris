@@ -3,54 +3,48 @@
 <head>
     <meta name="google-site-verification" content="6uKqGauF6GZyoysR8rwbsGvDvWV2SdLCQstH_zrUmRI" />
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Tetris - Orchestre MyGeneration</title>
     <link rel="stylesheet" href="style.css">
-	<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
 </head>
 <body>
 
     <!-- Page d'accueil avec une photo en fond -->
-     <div class="home-page">
-         <img src="images/band.jpg" alt="Band Image" class="background-image">
-         <button id="open-modal-button">Click to start</button>
+    <div class="home-page">
+        <img src="images/band.jpg" alt="Band Image" class="background-image">
+        <button id="open-modal-button">Click to start</button>
     </div>
 
     <!-- Logo de l'Orchestre MyGeneration -->
     <img src="images/mygen_little.PNG" alt="MyGeneration Logo" class="header-image">
-    
+
     <h1>Tetris - Orchestre MyGeneration</h1>
-    
+
     <!-- Conteneur principal -->
     <div class="main-container">
-	
-        <!-- Conteneur pour le tableau des scores, le chronomètre, et le logo Accel -->
+
+        <!-- Panneau gauche : scores + timer + icône accel -->
         <div class="score-timer-container">
-            <!-- Section du classement des scores -->
             <div class="scoreboard">
                 <h2>Top 10 Scores</h2>
                 <ol id="score-list"></ol>
             </div>
-
-            <!-- Conteneur pour le chronomètre -->
             <div class="timer-container">
                 Time : <span id="game-timer">00:00</span>
             </div>
-
-                <!-- Icone Accel -->
-             <img id="accel-icon" src="images/Accel.webp" alt="Accel Icon" class="accel-icon">
-
+            <img id="accel-icon" src="images/Accel.webp" alt="Accel Icon" class="accel-icon">
         </div>
 
-        <!-- Conteneur du jeu Tetris -->
+        <!-- Arène Tetris -->
         <div class="tetris-container">
             <canvas id="tetris" width="240" height="400"></canvas>
-            <div class="score">
-                Score: <span id="score">0</span>
-            </div>
+            <div class="score">Score: <span id="score">0</span></div>
+            <!-- Timer visible uniquement sur mobile (dans l'arène) -->
+            <span id="game-timer-mobile">00:00</span>
         </div>
-        
-        <!-- COnteneur section de sélection du joueur -->
+
+        <!-- Panneau droit : sélection joueur + pièce suivante -->
         <div class="player-selection-wrapper">
             <div class="player-selection">
                 <h2>Select Your Player</h2>
@@ -69,32 +63,45 @@
                 </div>
             </div>
 
-            <!-- Nouveau conteneur pour la prochaine pièce -->
             <div class="next-piece-container">
                 <h2>Next Piece</h2>
                 <canvas id="next-piece" width="100" height="100"></canvas>
-            
-                 <!-- Bouton Mute -->
                 <div class="mute-button">
-                     <img id="mute-button" src="images/mute.webp" alt="Mute Button" class="mute-button">
+                    <img id="mute-button" src="images/mute.webp" alt="Mute Button">
                 </div>
-                
-                 <!-- Icône pour les instructions -->
                 <div class="instructions-icon">
-                     <img src="images/Instructions.webp" alt="Instructions" id="instructions-button">
+                    <img src="images/Instructions.webp" alt="Instructions" id="instructions-button">
                 </div>
             </div>
         </div>
     </div>
-    
-    <!-- Boîte modale pour les messages généraux -->
+
+    <!-- Contrôles tactiles (visibles uniquement sur mobile) -->
+    <div id="mobile-controls">
+        <div class="mobile-controls-top">
+            <button class="ctrl-btn" id="btn-rotate-left">↺</button>
+            <button class="ctrl-btn" id="btn-mute-mobile">🔊</button>
+            <button class="ctrl-btn" id="btn-pause-mobile">⏸</button>
+            <button class="ctrl-btn" id="btn-rotate-right">↻</button>
+        </div>
+        <div class="mobile-controls-bottom">
+            <button class="ctrl-btn" id="btn-left">◀</button>
+            <button class="ctrl-btn" id="btn-down">▼</button>
+            <button class="ctrl-btn" id="btn-right">▶</button>
+        </div>
+    </div>
+
+    <!-- Affichage des combos -->
+    <div class="combo-display" id="combo-display"></div>
+
+    <!-- Modale messages généraux -->
     <div class="modal" id="modal">
         <div class="modal-content" id="modal-content">
             <p id="modal-message"></p>
         </div>
     </div>
-    
-    <!-- Boîte modale de démarrage pour la sélection du personnage -->
+
+    <!-- Modale démarrage -->
     <div class="modal" id="startup-modal">
         <div class="modal-content" id="startup-modal-content">
             <h2>Select Your Player</h2>
@@ -113,59 +120,52 @@
             </div>
         </div>
     </div>
-    
-    <!-- Boîte modale de Game Over -->
+
+    <!-- Modale Game Over -->
     <div class="modal" id="gameover-modal">
         <div class="modal-content" id="gameover-modal-content">
-            <h2>Game Over
-                LOOSER  </h2>
+            <h2>Game Over<br>LOOSER</h2>
             <button onclick="restartGame()">Restart</button>
         </div>
     </div>
-	
-    <!--*boite modale indiquant de renseigner le nom du joueur-->
+
+    <!-- Modale nom joueur -->
     <div class="modal" id="name-modal">
         <div class="modal-content" id="name-modal-content">
-            <p id="name-modal-message">Player 1 ?</p>
-            <p id="name-modal-message">That is not your name.</p>
+            <p id="name-modal-message">Player 1 ?<br>That is not your name.</p>
             <button id="name-modal-close">OK</button>
         </div>
     </div>
 
-    <!-- Boîte modale pour les mots interdits -->
-<div class="modal" id="banned-word-modal">
-    <div class="modal-content">
-        <p>You are better than this...</p>
-        <button id="banned-word-modal-close">OK</button>
+    <!-- Modale mots interdits -->
+    <div class="modal" id="banned-word-modal">
+        <div class="modal-content">
+            <p>You are better than this...</p>
+            <button id="banned-word-modal-close">OK</button>
+        </div>
     </div>
-</div>
 
-    <!-- Affichage des combos -->
-	<div class="combo-display" id="combo-display">
-	</div>
-
-   <!-- Boîte modale pour les instructions -->
-<div class="modal" id="instructions-modal">
-    <div class="modal-content">
-        <h2>Instructions</h2>
-        <ul>
-            <li>Déplacer à gauche : <strong>Flèche gauche (←)</strong></li>
-            <li>Déplacer à droite : <strong>Flèche droite (→)</strong></li>
-            <li>Descendre plus vite : <strong>Flèche bas (↓)</strong></li>
-            <li>Rotation horaire : <strong>Touche X</strong></li>
-            <li>Rotation antihoraire : <strong>Touche W</strong></li>
-            <li>Mettre en Pause : <strong>Touche P</strong></li>
-        </ul>
-        <button id="close-instructions">Fermer</button>
+    <!-- Modale instructions -->
+    <div class="modal" id="instructions-modal">
+        <div class="modal-content">
+            <h2>Instructions</h2>
+            <ul>
+                <li>Déplacer à gauche : <strong>Flèche gauche (←)</strong> ou <strong>◀</strong></li>
+                <li>Déplacer à droite : <strong>Flèche droite (→)</strong> ou <strong>▶</strong></li>
+                <li>Descendre plus vite : <strong>Flèche bas (↓)</strong> ou <strong>▼</strong></li>
+                <li>Rotation horaire : <strong>Touche X</strong> ou <strong>↻</strong></li>
+                <li>Rotation antihoraire : <strong>Touche W</strong> ou <strong>↺</strong></li>
+                <li>Mettre en Pause : <strong>Touche P</strong> ou <strong>⏸</strong></li>
+            </ul>
+            <button id="close-instructions">Fermer</button>
+        </div>
     </div>
-</div>
-	
-    <!-- Ajout des élément audio -->
+
+    <!-- Audio -->
     <audio id="background-music" src="sounds/music_1.mp3" loop></audio>
-	<audio id="woosh-sound" src="sounds/woosh.mp3"></audio>
+    <audio id="woosh-sound" src="sounds/woosh.mp3"></audio>
     <audio id="line-clear-sound" src="sounds/magic-fairy.mp3"></audio>
 
-    <!-- Inclusion du script JavaScript -->
     <script src="script.js"></script>
 </body>
 </html>

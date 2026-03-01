@@ -561,12 +561,9 @@ h1 {
 }
 
 .ctrl-btn {
-    background-color: rgba(0, 0, 0, 0.6);
-    color: #fff;
     font-family: 'VT323', monospace;
     font-size: 1.8em;
-    border: 2px solid #e252f0;
-    border-radius: 10px;
+    border-radius: 8px;
     padding: 12px 0;
     cursor: pointer;
     user-select: none;
@@ -574,12 +571,90 @@ h1 {
     flex: 1;
     margin: 0 4px;
     text-align: center;
-    active-transform: scale(0.95);
+    border: 3px solid #000;
+    /* Relief style années 90 */
+    box-shadow: 3px 3px 0px #000;
+    transition: transform 0.08s, box-shadow 0.08s;
 }
 
+/* Couleurs individuelles années 90 */
+#btn-rotate-left  { background-color: #FF6EC7; color: #000; } /* Rose fluo */
+#btn-mute-mobile  { background-color: #00FFFF; color: #000; } /* Cyan fluo */
+#btn-pause-mobile { background-color: #FFE600; color: #000; } /* Jaune fluo */
+#btn-rotate-right { background-color: #FF6EC7; color: #000; } /* Rose fluo */
+#btn-left         { background-color: #00FF41; color: #000; } /* Vert matrix */
+#btn-down         { background-color: #FF4500; color: #fff; } /* Orange-rouge */
+#btn-right        { background-color: #00FF41; color: #000; } /* Vert matrix */
+
 .ctrl-btn:active {
-    background-color: rgba(226, 82, 240, 0.4);
-    transform: scale(0.95);
+    transform: translate(3px, 3px);
+    box-shadow: 0px 0px 0px #000;
+}
+
+/* Modale pause mobile — tableau des scores */
+#mobile-pause-modal {
+    display: none;
+    position: fixed;
+    z-index: 1300;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#mobile-pause-modal .pause-content {
+    background-color: #000;
+    border: 4px solid #FFE600;
+    border-radius: 16px;
+    padding: 24px 20px;
+    width: 88%;
+    max-width: 360px;
+    text-align: center;
+    font-family: 'VT323', monospace;
+    color: #00FF00;
+}
+
+#mobile-pause-modal h2 {
+    font-size: 2em;
+    color: #FFE600;
+    margin-bottom: 6px;
+}
+
+#mobile-pause-modal h3 {
+    font-size: 1.4em;
+    color: #FF6EC7;
+    margin: 12px 0 6px;
+}
+
+#mobile-pause-score-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 16px;
+    font-size: 1.1em;
+    color: #fff;
+}
+
+#mobile-pause-score-list li {
+    margin: 4px 0;
+}
+
+#btn-resume {
+    background-color: #FFE600;
+    color: #000;
+    font-family: 'VT323', monospace;
+    font-size: 1.6em;
+    border: 3px solid #000;
+    border-radius: 8px;
+    padding: 10px 30px;
+    box-shadow: 3px 3px 0px #000;
+    cursor: pointer;
+}
+
+#btn-resume:active {
+    transform: translate(3px, 3px);
+    box-shadow: none;
 }
 
 /* =====================
@@ -653,8 +728,8 @@ h1 {
     }
 
     .ctrl-btn {
-        font-size: 1.6em;
-        padding: 14px 0;
+        font-size: 1.5em;
+        padding: 13px 0;
     }
 
     /* Modales adaptées mobile */

@@ -96,12 +96,36 @@ function togglePause() {
         cancelAnimationFrame(animationFrameId);
         clearInterval(timerInterval);
         elapsedTimeBeforePause = Date.now() - startTime;
-        showModal("Game Paused");
+        // Sur mobile : afficher le tableau des scores dans la modale pause
+        const isMobile = window.innerWidth <= 600;
+        if (isMobile) {
+            showMobilePauseModal();
+        } else {
+            showModal("Game Paused");
+        }
     } else {
+        hideMobilePauseModal();
         hideModal();
         startTimer();
         animationFrameId = requestAnimationFrame(update);
     }
+}
+
+function showMobilePauseModal() {
+    const modal = document.getElementById('mobile-pause-modal');
+    if (!modal) return;
+    // Recharger les scores dans la modale pause
+    const srcList = document.getElementById('score-list');
+    const destList = document.getElementById('mobile-pause-score-list');
+    if (srcList && destList) {
+        destList.innerHTML = srcList.innerHTML;
+    }
+    modal.style.display = 'flex';
+}
+
+function hideMobilePauseModal() {
+    const modal = document.getElementById('mobile-pause-modal');
+    if (modal) modal.style.display = 'none';
 }
 
 // =====================
@@ -752,10 +776,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
     addTouchBtn('btn-left',         () => playerMove(-1));
     addTouchBtn('btn-right',        () => playerMove(1));
-    addTouchBtn('btn-down',         () => playerDrop());
     addTouchBtn('btn-rotate-left',  () => playerRotate(-1));
     addTouchBtn('btn-rotate-right', () => playerRotate(1));
     addTouchBtn('btn-pause-mobile', () => togglePause());
+
+    // Bouton descente : descend en continu tant qu'on maintient appuyé
+    const btnDown = document.getElementById('btn-down');
+    if (btnDown) {
+        let dropHoldInterval = null;
+
+        function startDrop() {
+            playerDrop(); // premier drop immédiat
+            dropHoldInterval = setInterval(() => {
+                playerDrop();
+            }, 80); // toutes les 80ms tant qu'on maintient
+        }
+
+        function stopDrop() {
+            if (dropHoldInterval) {
+                clearInterval(dropHoldInterval);
+                dropHoldInterval = null;
+            }
+        }
+
+        btnDown.addEventListener('touchstart', (e) => { e.preventDefault(); startDrop(); }, { passive: false });
+        btnDown.addEventListener('touchend',   (e) => { e.preventDefault(); stopDrop();  }, { passive: false });
+        btnDown.addEventListener('touchcancel',(e) => { stopDrop(); }, { passive: false });
+        btnDown.addEventListener('mousedown',  () => startDrop());
+        btnDown.addEventListener('mouseup',    () => stopDrop());
+        btnDown.addEventListener('mouseleave', () => stopDrop());
+    }
 
     // Bouton mute mobile
     const btnMuteMobile = document.getElementById('btn-mute-mobile');
